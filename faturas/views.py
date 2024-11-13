@@ -6,7 +6,8 @@ from faturas.forms import CompraForm
 
 
 def home(request):
-    return render(request, 'faturas/index.html')
+    return render(request, 'faturas/home.html')
+
 
 @login_required
 def cadastrar_compra(request):

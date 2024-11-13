@@ -1,6 +1,12 @@
-<h2>Cadastrar Compra</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Cadastrar</button>
-</form>
+{% extends "faturas/base.html" %}
+{% load static %}
+
+{% block content %}
+    <h2>Cadastrar Compra</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Cadastrar</button>
+    </form>
+    <a href="{% url 'faturas:lista_compras' %}">Voltar para Lista de Compras</a>
+{% endblock %}

@@ -32,11 +32,11 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'faturas:home' %}">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3"> FATURAS <sup></sup></div>
+                <div class="sidebar-brand-text mx-3"> Faturas <sup></sup></div>
             </a>
 
             <!-- Divider -->
@@ -111,7 +111,7 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
+                        <a class="collapse-item" href="{% url 'login' %}">Login</a>
                         <a class="collapse-item" href="register.html">Register</a>
                         <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
                         <div class="collapse-divider"></div>
@@ -161,7 +161,7 @@
                         <i class="fa fa-bars"></i>
                     </button>
 
-                    <!-- Topbar Search -->
+                    <!-- Topbar Search #comentado
                     <form
                         class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
@@ -174,6 +174,7 @@
                             </div>
                         </div>
                     </form>
+                    -->
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -328,11 +329,9 @@
                                 
                                 {% if request.user.is_authenticated %}
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ request.user.username|capfirst }}</span>
-                                {% else %}
-                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">Bem vindo</span>
+                                    <img class="img-profile rounded-circle"
+                                        src="{% static 'img/undraw_profile.svg' %}">
                                 {% endif %}
-                                <img class="img-profile rounded-circle"
-                                    src="{% static 'img/undraw_profile.svg' %}">
                             </a>
                             {% if request.user.is_authenticated %}
                                 <!-- Dropdown - User Information -->
@@ -376,7 +375,11 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">Pagina inicial</h1>
+                    {% block content %}
+                    {% endblock %}
+                    {% if not request.user.is_authenticated %}
+                        <p>Faça o login para acessar suas compras e faturas.</p>
+                    {% endif %}
 
                 </div>
                 <!-- /.container-fluid -->
