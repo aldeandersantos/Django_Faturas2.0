@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Login</title>
+    <title>Login</title>
 
     <!-- Custom fonts for this template-->
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
@@ -27,6 +27,8 @@
 
     <div class="container">
 
+
+
         <!-- Outer Row -->
         <div class="row justify-content-center">
 
@@ -42,25 +44,27 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Bem vindo!</h1>
                                     </div>
-                                    <form class="user">
+                                    <form method="post" class="user">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="next" value="{% url 'faturas:home' %}">
                                         <div class="form-group">
-                                            <input type="email" class="form-control form-control-user"
-                                                id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Email">
+                                            <input type="text" id="email_address" class="form-control form-control-user" name="username" placeholder="Enter Username..." required autofocus>
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Senha">
+                                            <input type="password" id="password" class="form-control form-control-user" name="password" placeholder="Password" required>
                                         </div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
                                                 <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Mantenha-se logado</label>
+                                                <label class="custom-control-label" for="customCheck">Remember Me</label>
                                             </div>
                                         </div>
-                                        <a href="index.html" class="btn btn-primary btn-user btn-block">
+                                        <button type="submit" class="btn btn-primary btn-user btn-block">
                                             Login
-                                        </a>
+                                        </button>
+                                        {% for k, v in form.errors.items %}
+                                            <div class="alert alert-danger mt-2">{{ v }}</div>
+                                        {% endfor %}
                                     </form>
                                     <hr>
                                     <div class="text-center">
@@ -68,6 +72,14 @@
                                     </div>
                                     <div class="text-center">
                                         <a class="small" href="register.html">Crie sua conta!</a>
+                                    </div>
+                                    <!-- Home Button -->
+                                    <div class="row mt-4 justify-content-center">
+                                        <div class="col-12 text-center">
+                                            <a href="{% url 'faturas:home' %}" class="btn btn-secondary">
+                                                Pagina Inicial
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -82,14 +94,14 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="js/sb-admin-2.min.js"></script>
+    <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
 
 </body>
 
