@@ -1,0 +1,10 @@
+<h2>Fatura de {{ fatura.usuario.username }} - {{ fatura.mes }}/{{ fatura.ano }}</h2>
+<p>Total: R$ {{ fatura.total }}</p>
+
+{% for compra in fatura.compras %}
+    <p>{{ compra.descricao }} - R$ {{ compra.valor }}</p>
+    <form action="{% url 'faturas:deletar_compra' compra.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja deletar esta compra?');">Deletar</button>
+    </form>
+{% endfor %}
