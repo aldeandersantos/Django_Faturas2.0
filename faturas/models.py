@@ -9,7 +9,7 @@ class Compra(models.Model):
     nome_compra = models.CharField(max_length=100, blank=False, null=False, default='')
     valor_compra = models.DecimalField(max_digits=10, decimal_places=2, blank=False, null=False)
     data_compra = models.DateField(default=hoje, blank=False, null=False)
-    parcelas = models.PositiveIntegerField(default=1, blank=False, null=False)
+    n_parcelas = models.PositiveIntegerField(default=1, blank=False, null=False)
     compra_recorrente = models.BooleanField(default=False)
     compra_parcelada = models.BooleanField(default=False)
 
@@ -21,16 +21,13 @@ class Compra(models.Model):
         return f"{self.nome_compra} - {self.usuario.username}"
 
 
-class Fatura(models.Model):
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
-    mes = models.IntegerField()
-    ano = models.IntegerField()
-    total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-
-    def calcular_total(self):
-        compras = Compra.objects.filter(usuario=self.usuario, data_compra__month=self.mes, data_compra__year=self.ano)
-        self.total = sum(compra.total for compra in compras)
-        self.save()
+class ComprasParceladas(models.Model):
+    nome_compra = models.CharField(max_length=100, blank=False, null=False, default='')
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    data_compra = models.DateField()
+    valor_parcela = models.DecimalField(max_digits=10, decimal_places=2)
+    parcela = models.PositiveIntegerField(default=None)
+    total_parcelas = models.PositiveIntegerField(default=None)
 
     def __str__(self):
-        return f"Fatura de {self.usuario.username} - {self.mes}/{self.ano}"
+        return f"Parcela de {self.compra.nome_compra} - {self.usuario.username} - {self.data_compra}"

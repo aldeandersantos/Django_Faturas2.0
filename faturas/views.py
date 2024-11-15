@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Compra, Fatura
+from .models import Compra
 from faturas.forms import CompraForm
-from faturas.service import validar_compra
+from faturas.service import *
+from faturas.utils import mes_ano_atual
 
 
 
@@ -20,6 +21,8 @@ def cadastrar_compra(request):
             falha = validar_compra(compra)
             if falha is None:
                 compra.save()
+                if compra.compra_parcelada:
+                    parcelar_compra(compra)
             else:
                 form.add_error(falha[0], falha[1])
         return render(request, 'faturas/cadastrar_compra.html', {'form': form})
@@ -31,27 +34,20 @@ def cadastrar_compra(request):
 
 
 @login_required
-def lista_compras(request):
-    compras = Compra.objects.filter(usuario=request.user)
-    return render(request, 'faturas/lista_compras.html', {'compras': compras})
-
-
-@login_required
-def ver_fatura(request, mes, ano):
-    fatura, created = Fatura.objects.get_or_create(usuario=request.user, mes=mes, ano=ano)
-    fatura.calcular_total()
-    return render(request, 'faturas/ver_fatura.html', {'fatura': fatura})
+def ver_fatura(request):
+    mes, ano = mes_ano_atual()
+    fatura, total = gera_fatura(request, mes, ano)
+    return render(request, 'faturas/ver_fatura.html', {'fatura': fatura, 'mes': mes, 'ano': ano, 'total': total})
 
 @login_required
 def deletar_compra(request, id):
     compra = Compra.objects.get(id=id)
     if request.method == 'POST':
         compra.delete()
-        return redirect('faturas:lista_compras')
-    return render(request, 'faturas/deletar_compra.html', {'compra': compra})
+    return redirect('faturas:lista_compras')
 
 @login_required
-def tabelas(request):
+def ver_compras(request):
     compras = Compra.objects.filter(usuario=request.user)
     for compra in compras:
         if not compra.compra_parcelada:
