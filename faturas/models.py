@@ -1,22 +1,24 @@
 from django.db import models
 from django.contrib.auth.models import User
-from datetime import datetime
+from faturas.utils import hoje
 
 
 
 class Compra(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
-    produto = models.CharField(max_length=255)
-    quantidade = models.PositiveIntegerField()
-    preco_unitario = models.DecimalField(max_digits=10, decimal_places=2)
-    data_compra = models.DateTimeField(default=datetime.now)
+    nome_compra = models.CharField(max_length=100, blank=False, null=False, default='')
+    valor_compra = models.DecimalField(max_digits=10, decimal_places=2, blank=False, null=False)
+    data_compra = models.DateField(default=hoje, blank=False, null=False)
+    parcelas = models.PositiveIntegerField(default=1, blank=False, null=False)
+    compra_recorrente = models.BooleanField(default=False)
+    compra_parcelada = models.BooleanField(default=False)
 
     @property
     def total(self):
-        return self.quantidade * self.preco_unitario
+        return self.nome_compra * self.valor_compra
 
     def __str__(self):
-        return f"{self.produto} - {self.usuario.username}"
+        return f"{self.nome_compra} - {self.usuario.username}"
 
 
 class Fatura(models.Model):

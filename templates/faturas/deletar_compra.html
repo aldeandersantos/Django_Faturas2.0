@@ -1,4 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
 <form action="{% url 'faturas:deletar_compra' compra.id %}" method="post">
     {% csrf_token %}
-    <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja deletar esta compra?');">Deletar</button>
+    <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja deletar esta compra?');">Deletar compra</button>
 </form>
+{% endblock %}

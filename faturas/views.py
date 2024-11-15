@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Compra, Fatura
 from faturas.forms import CompraForm
+from faturas.service import validar_compra
 
 
 
@@ -16,8 +17,13 @@ def cadastrar_compra(request):
         if form.is_valid():
             compra = form.save(commit=False)
             compra.usuario = request.user
-            compra.save()
-            return redirect('faturas:lista_compras')
+            falha = validar_compra(compra)
+            if falha is None:
+                compra.save()
+            else:
+                form.add_error(falha[0], falha[1])
+        return render(request, 'faturas/cadastrar_compra.html', {'form': form})
+
     else:
         form = CompraForm()
 
@@ -43,4 +49,12 @@ def deletar_compra(request, id):
         compra.delete()
         return redirect('faturas:lista_compras')
     return render(request, 'faturas/deletar_compra.html', {'compra': compra})
+
+@login_required
+def tabelas(request):
+    compras = Compra.objects.filter(usuario=request.user)
+    for compra in compras:
+        if not compra.compra_parcelada:
+            compra.parcelas = ''
+    return render(request, 'faturas/tables.html', {'compras': compras})
 

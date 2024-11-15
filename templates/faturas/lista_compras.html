@@ -1,11 +1,14 @@
-{% extends "faturas/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block content %}
     <h2>Lista de Compras</h2>
     <ul>
         {% for compra in compras %}
-            <li>{{ compra.produto }} - {{ compra.quantidade }} - {{ compra.total }}</li>
+            <li>
+                {{ compra.produto }} - {{ compra.quantidade }} - {{ compra.total }}
+                <a href="{% url 'faturas:deletar_compra' compra.id %}" class="btn btn-sm btn-light" style="margin-left: 10px;">Apagar</a>
+            </li>
         {% endfor %}
     </ul>
     <a href="{% url 'faturas:cadastrar_compra' %}">Cadastrar Nova Compra</a>
