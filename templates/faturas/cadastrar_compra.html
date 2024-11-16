@@ -13,19 +13,21 @@
                         
                         <!-- Exibindo erros de formulário antes do campo -->
                         {% for field in form %}
-                            <div class="form-group">
-                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                {{ field }}
-                                
-                                <!-- Erros do campo -->
-                                {% if field.errors %}
-                                    <div class="text-danger">
-                                        {% for error in field.errors %}
-                                            <p>{{ error }}</p>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            </div>
+                            {% if field.name != 'compra_parcelada' %}
+                                <div class="form-group">
+                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    {{ field }}
+                                    
+                                    <!-- Erros do campo -->
+                                    {% if field.errors %}
+                                        <div class="text-danger">
+                                            {% for error in field.errors %}
+                                                <p>{{ error }}</p>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
                         {% endfor %}
                         
                         <button type="submit" class="btn btn-primary btn-user btn-block">Cadastrar</button>
