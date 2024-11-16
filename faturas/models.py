@@ -22,12 +22,13 @@ class Compra(models.Model):
 
 
 class ComprasParceladas(models.Model):
-    nome_compra = models.CharField(max_length=100, blank=False, null=False, default='')
+    id_compra = models.ForeignKey(Compra, on_delete=models.CASCADE)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    nome_compra = models.CharField(max_length=100, blank=False, null=False, default='')
     data_compra = models.DateField()
     valor_parcela = models.DecimalField(max_digits=10, decimal_places=2)
     parcela = models.PositiveIntegerField(default=None)
     total_parcelas = models.PositiveIntegerField(default=None)
 
     def __str__(self):
-        return f"Parcela de {self.compra.nome_compra} - {self.usuario.username} - {self.data_compra}"
+        return f"Parcela de {self.nome_compra} - {self.usuario.username} - {self.data_compra}"

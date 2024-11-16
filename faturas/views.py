@@ -20,9 +20,12 @@ def cadastrar_compra(request):
             compra.usuario = request.user
             falha = validar_compra(compra)
             if falha is None:
-                compra.save()
-                if compra.compra_parcelada:
+                if compra.n_parcelas > 1:
+                    compra.compra_parcelada = True
+                    compra.save()
                     parcelar_compra(compra)
+                else:
+                    compra.save()
             else:
                 form.add_error(falha[0], falha[1])
         return render(request, 'faturas/cadastrar_compra.html', {'form': form})
@@ -43,8 +46,10 @@ def ver_fatura(request):
 def deletar_compra(request, id):
     compra = Compra.objects.get(id=id)
     if request.method == 'POST':
+        if compra.compra_parcelada:
+            ComprasParceladas.objects.filter(compra_compra_id=compra.pk).delete()
         compra.delete()
-    return redirect('faturas:lista_compras')
+        return redirect('faturas:lista_compras')
 
 @login_required
 def ver_compras(request):

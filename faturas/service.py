@@ -1,34 +1,38 @@
 from dateutil.relativedelta import relativedelta
 from faturas.models import Compra, ComprasParceladas
-
+from faturas.forms import ComprasParceladasForm
 
 
 
 def validar_compra(compra):
-    if not compra.compra_parcelada and compra.n_parcelas != 1:
-        return ('parcelas', 'Uma compra não parcelada deve ter apenas uma parcela.')
-
-    if compra.compra_parcelada and compra.n_parcelas <= 1:
-        return ('parcelas', 'Uma compra parcelada deve ter mais de uma parcela.')
-
+    if compra.compra_recorrente and compra.n_parcelas != 1:
+        return ('n_parcelas', 'Uma compra recorrente não pode ser parcelada.')
     return None
 
 def parcelar_compra(compra):
     usuario = compra.usuario
-    n_parcelas = compra.n_parcelas
-    valor_parcela = compra.valor_compra / n_parcelas
+    n_parcelas = int(compra.n_parcelas)
+    valor_parcela = int(compra.valor_compra / n_parcelas)
     data_parcela = compra.data_compra
     nome_compra = compra.nome_compra
+    id_compra = compra.id
 
     for i in range(n_parcelas):
-        ComprasParceladas.objects.create(
-            nome_compra=nome_compra,
-            usuario=usuario,
-            data_compra=data_parcela,
-            valor_parcela=valor_parcela,
-            parcela=i + 1,
-            total_parcelas=n_parcelas
-        )
+        print(usuario)
+        form_data = {
+            'id_compra': id_compra,
+            'nome_compra': nome_compra,
+            'usuario': usuario,
+            'data_compra': data_parcela,
+            'valor_parcela': valor_parcela,
+            'parcela': i + 1,
+            'total_parcelas': n_parcelas
+        }
+        form = ComprasParceladasForm(form_data)
+        if form.is_valid():
+            form.save()
+        else:
+            raise ValueError(f"Erro ao salvar parcela: {form.errors}, {form_data}")
         data_parcela += relativedelta(months=1)
         
 
