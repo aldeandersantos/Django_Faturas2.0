@@ -44,9 +44,24 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'faturas:lista_compras' %}">
+                <a class="nav-link" href="{% url 'faturas:home' %}">
+                    <i class="fas fa-fw fa-home"></i>
+                    <span>Página Inicial</span></a>
+            </li>
+            <!-- Nav Item - Compras Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCompras"
+                    aria-expanded="true" aria-controls="collapseCompras">
                     <i class="fas fa-fw fa-shopping-cart"></i>
-                    <span>Ir para as compras</span></a>
+                    <span>Compras</span>
+                </a>
+                <div id="collapseCompras" class="collapse" aria-labelledby="headingCompras" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <!--<h6 class="collapse-header">Compras:</h6>-->
+                        <a class="collapse-item" href="{% url 'faturas:lista_compras' %}">Ver minhas compras</a>
+                        <a class="collapse-item" href="{% url 'faturas:cadastrar_compra' %}">Cadastrar compra</a>
+                    </div>
+                </div>
             </li>
 
             <!-- Divider -->
@@ -54,7 +69,7 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Interface
+                Faturas
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
@@ -62,13 +77,11 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
-                    <span>Components</span>
+                    <span>Faturas</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
+                        <a class="collapse-item" href="{% url 'faturas:ver_fatura'%}">Fatura</a>
                     </div>
                 </div>
             </li>

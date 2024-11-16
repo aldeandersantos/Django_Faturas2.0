@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Page Heading -->
+<h1 class="h3 mb-2 text-gray-800">Tables</h1>
+<p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
+    For more information about DataTables, please visit the <a target="_blank"
+        href="https://datatables.net">official DataTables documentation</a>.</p>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Nome da compra</th>
+                        <th>Valor da compra</th>
+                        <th>Data da compra</th>
+                        <th>Parcela</th>
+                        <th>Compra parcelada</th>
+                    </tr>
+                </thead>
+                {% if compras %}
+                <tfoot>
+                    <tr>
+                        <th>Nome da compra</th>
+                        <th>Valor da compra</th>
+                        <th>Data da compra</th>
+                        <th>Parcela</th>
+                        <th>Compra parcelada</th>
+                    </tr>
+                </tfoot>
+                {% endif %}
+                <tbody>
+                    {% for compra in compras %}
+                    <tr>
+                        <td>{{ compra.nome_compra }}</td>
+                        <td>R$ {{ compra.valor_compra }}</td>
+                        <td>{{ compra.data_compra|date:"d/m/Y" }}</td>
+                        <td>{{ compra.n_parcelas }}</td>
+                        <td>{{ compra.compra_parcelada|yesno:"Sim,Não" }}</td>
+                        <td>
+                            <a href="#" class="fas fa-trash-alt" data-toggle="modal" data-target="#deleteModal{{ compra.id }}"></a>
+
+                            <!-- Delete Modal -->
+                            <div class="modal fade" id="deleteModal{{ compra.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{ compra.id }}" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteModalLabel{{ compra.id }}">Confirmar Exclusão</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Você tem certeza que deseja deletar a compra "{{ compra.nome_compra }}"?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                            <form method="post" action="{% url 'faturas:deletar_compra' compra.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger">Deletar</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

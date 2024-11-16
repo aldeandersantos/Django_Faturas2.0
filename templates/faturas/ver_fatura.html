@@ -1,10 +1,25 @@
-<h2>Fatura de {{ fatura.usuario.username }} - {{ fatura.mes }}/{{ fatura.ano }}</h2>
-<p>Total: R$ {{ fatura.total }}</p>
+{% extends "base.html" %}
+{% block content %}
 
-{% for compra in fatura.compras %}
-    <p>{{ compra.descricao }} - R$ {{ compra.valor }}</p>
-    <form action="{% url 'faturas:deletar_compra' compra.id %}" method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja deletar esta compra?');">Deletar</button>
-    </form>
-{% endfor %}
+<h2>Fatura do mês de {{ mes }}/{{ ano }}</h2>
+<p>Total: R$ {{ total }}</p>
+<table>
+    <thead>
+        <tr>
+            <th>Nome da Compra</th>
+            <th>Valor</th>
+            <th>Parcela</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for compra in fatura %}
+        <tr>
+            <td>{{ compra.0 }}</td>
+            <td>R$ {{ compra.1 }}</td>
+            <td>{{ compra.2 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
