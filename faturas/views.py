@@ -38,17 +38,20 @@ def cadastrar_compra(request):
 
 @login_required
 def ver_fatura(request):
-    mes, ano = mes_ano_atual()
-    fatura, total = gera_fatura(request, mes, ano)
-    return render(request, 'faturas/ver_fatura.html', {'fatura': fatura, 'mes': mes, 'ano': ano, 'total': total})
+    mes = request.GET.get('mes', None)
+    ano = request.GET.get('ano', None)
+    if mes is None or ano is None:
+        mes, ano = mes_ano_atual()
+    faturas, total = gera_fatura(request, mes, ano)
+    return render(request, 'faturas/ver_fatura.html', {'faturas': faturas, 'mes': mes, 'ano': ano, 'total': total})
 
 @login_required
 def deletar_compra(request, id):
     compra = Compra.objects.get(id=id)
+    compras = Fatura.objects.filter(compra=compra)
     if request.method == 'POST':
-        if compra.compra_parcelada:
-            ComprasParceladas.objects.filter(compra_compra_id=compra.pk).delete()
         compra.delete()
+        compras.delete()
         return redirect('faturas:lista_compras')
 
 @login_required
