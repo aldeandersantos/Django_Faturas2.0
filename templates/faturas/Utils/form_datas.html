@@ -1,0 +1,32 @@
+{% block content %}
+<div class="form-row">
+    <div class="col">
+        <label for="mes">Mês:</label>
+        <select id="mes" name="mes" class="form-control">
+            <option value="1" {% if mes == 1 %}selected{% endif %}>Janeiro</option>
+            <option value="2" {% if mes == 2 %}selected{% endif %}>Fevereiro</option>
+            <option value="3" {% if mes == 3 %}selected{% endif %}>Março</option>
+            <option value="4" {% if mes == 4 %}selected{% endif %}>Abril</option>
+            <option value="5" {% if mes == 5 %}selected{% endif %}>Maio</option>
+            <option value="6" {% if mes == 6 %}selected{% endif %}>Junho</option>
+            <option value="7" {% if mes == 7 %}selected{% endif %}>Julho</option>
+            <option value="8" {% if mes == 8 %}selected{% endif %}>Agosto</option>
+            <option value="9" {% if mes == 9 %}selected{% endif %}>Setembro</option>
+            <option value="10" {% if mes == 10 %}selected{% endif %}>Outubro</option>
+            <option value="11" {% if mes == 11 %}selected{% endif %}>Novembro</option>
+            <option value="12" {% if mes == 12 %}selected{% endif %}>Dezembro</option>
+        </select>
+    </div>
+    <div class="col">
+        <label for="ano">Ano:</label>
+        <select id="ano" name="ano" class="form-control">
+            <option value="{{ ano|add:"-1" }}">{{ ano|add:"-1" }}</option>
+            <option value="{{ ano }}" selected>{{ ano }}</option>
+            <option value="{{ ano|add:"1" }}">{{ ano|add:"1" }}</option>
+        </select>
+    </div>
+    <div class="col">
+        <button type="submit" class="btn btn-primary mt-4">Filtrar</button>
+    </div>
+</div>
+{% endblock %}

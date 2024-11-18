@@ -1,25 +1,54 @@
 {% extends "base.html" %}
 {% block content %}
 
+<form method="get" action="{% url 'faturas:ver_fatura' %}">
+    {% include "faturas/utils/form_datas.html" %}
+</form>
+
+<br>
 <h2>Fatura do mês de {{ mes }}/{{ ano }}</h2>
-<p>Total: R$ {{ total }}</p>
-<table>
-    <thead>
-        <tr>
-            <th>Nome da Compra</th>
-            <th>Valor</th>
-            <th>Parcela</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for compra in fatura %}
-        <tr>
-            <td>{{ compra.0 }}</td>
-            <td>R$ {{ compra.1 }}</td>
-            <td>{{ compra.2 }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<p>Total da fatura: R$ {{ total }}</p>
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Faturas</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Nome da Compra</th>
+                        <th>Valor</th>
+                        <th>Parcela</th>
+                        <th>Valor total da compra</th>
+                        <th>Data da compra</th>
+                    </tr>
+                </thead>
+                {% if faturas %}
+                <tfoot>
+                    <tr>
+                        <th>Nome da Compra</th>
+                        <th>Valor</th>
+                        <th>Parcela</th>
+                        <th>Valor total da compra</th>
+                        <th>Data da compra</th>
+                    </tr>
+                </tfoot>
+                {% endif %}
+                <tbody>
+                    {% for compra in faturas %}
+                    <tr>
+                        <td>{{ compra.nome_compra }}</td>
+                        <td>R$ {{ compra.valor_parcela }}</td>
+                        <td>{{ compra.parcela_atual }}</td>
+                        <td>R$ {{ compra.valor_compra }}</td>
+                        <td>{{ compra.data_compra }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

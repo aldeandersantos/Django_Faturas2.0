@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Exportar Fatura para Excel</h1>
+    <form action="{% url 'exportar_fatura' %}" method="post">
+        {% csrf_token %}
+        <label for="mes">Mês:</label>
+        <select id="mes" name="mes">
+            {% for mes in meses %}
+                <option value="{{ mes.value }}">{{ mes.name }}</option>
+            {% endfor %}
+        </select>
+        <label for="ano">Ano:</label>
+        <select id="ano" name="ano">
+            {% for ano in anos %}
+                <option value="{{ ano }}">{{ ano }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Exportar</button>
+    </form>
+{% endblock %}

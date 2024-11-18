@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Compra, ComprasParceladas
+from .models import Compra, Fatura
 
 admin.site.register(Compra)
-admin.site.register(ComprasParceladas)
+admin.site.register(Fatura)
