@@ -4,9 +4,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from .models import Compra
+from django.contrib.auth.models import User
 from django.http import HttpResponse
-from faturas.forms import CompraForm
-from faturas.service import *
+from faturas.forms import CompraForm, RegistroUsuarioForm
+from faturas.service.compras_service import *
+from faturas.service.usuario_service import *
 from faturas.utils import mes_ano_atual
 
 
@@ -62,6 +64,26 @@ def ver_compras(request):
     return render(request, 'faturas/tables.html', {'compras': compras})
 
 @staff_member_required
+def cadastrar_compra_admin(request):
+    usuarios = User.objects.all()
+    if request.method == 'POST':
+        form = CompraForm(request.POST)
+        if form.is_valid():
+            compra = form.save(commit=False)
+            compra.usuario = User.objects.get(id=request.POST.get('usuario'))
+            falha = validar_compra(compra)
+            if falha is None:
+                salvar_compra(compra)
+            else:
+                form.add_error(falha[0], falha[1])
+        return render(request, 'faturas/cadastro_compras_admin.html', {'form': form, 'usuarios': usuarios})
+
+    else:
+        form = CompraForm()
+
+    return render(request, 'faturas/cadastro_compras_admin.html', {'form': form, 'usuarios': usuarios})
+
+@staff_member_required
 def exportar_fatura_excel(request):
     mes = request.GET.get('mes')
     ano = request.GET.get('ano')
@@ -96,4 +118,11 @@ def exportar_fatura_excel(request):
     
     except Exception as e:
         return HttpResponse(f"Erro ao gerar o arquivo Excel: {str(e)}", status=500)
+    
+def registrar_usuario(request):
+    registro = registra_usuario(request)
+    if registro is None:
+        redirect('login')
+    
+    return render(registro, 'registration/register.html')
 
