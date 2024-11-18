@@ -1,5 +1,5 @@
 from dateutil.relativedelta import relativedelta
-from faturas.models import Fatura
+from faturas.models import Compra, Fatura
 from faturas.forms import FaturaForm
 
 
@@ -44,8 +44,25 @@ def atualiza_fatura(compra):
 def gera_fatura(request, mes, ano):
     usuario = request.user
     faturas = Fatura.objects.filter(usuario=usuario, mes=mes, ano=ano)
+    recorrente = Compra.objects.filter(usuario=usuario, compra_recorrente=True)
     total = 0
-        
+    if recorrente:
+        for compra in recorrente:
+            compra.mes = compra.data_compra.month
+            compra.ano = compra.data_compra.year
+            compra.parcela_atual = ''
+            
+            fatura_data = {
+                'usuario': compra.usuario,
+                'compra': compra,
+                'nome_compra': compra.nome_compra,
+                'parcela_atual': '',
+                'valor_parcela': 0,
+                'valor_compra': compra.valor_compra,
+                'data_compra': compra.data_compra,
+                'mes': mes,
+                'ano': ano
+            }
     for compra in faturas:
         total += compra.valor_parcela
     return faturas, total

@@ -5,3 +5,4 @@ typing_extensions==4.12.2
 tzdata==2024.2
 python-dateutil==2.9.0.post0
 pandas==2.2.3
+xlsxWriter==3.2.0

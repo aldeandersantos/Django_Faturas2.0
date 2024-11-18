@@ -82,6 +82,9 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <a class="collapse-item" href="{% url 'faturas:ver_fatura'%}">Fatura</a>
+                        {% if request.user.is_staff %}
+                            <a class="collapse-item" href="{% url 'faturas:exportar_fatura'%}">Exportar Fatura</a>
+                        {% endif %}
                     </div>
                 </div>
             </li>
