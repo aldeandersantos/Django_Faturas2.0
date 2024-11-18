@@ -24,12 +24,7 @@ def cadastrar_compra(request):
             compra.usuario = request.user
             falha = validar_compra(compra)
             if falha is None:
-                if compra.n_parcelas > 1:
-                    compra.compra_parcelada = True
-                    compra.save()
-                    parcelar_compra(compra)
-                else:
-                    compra.save()
+                salvar_compra(compra)
             else:
                 form.add_error(falha[0], falha[1])
         return render(request, 'faturas/cadastrar_compra.html', {'form': form})
