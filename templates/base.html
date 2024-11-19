@@ -96,7 +96,10 @@
             </a>
             <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="{% url 'faturas:importar_fatura'%}">Importar Fatura</a>
                     <a class="collapse-item" href="{% url 'faturas:exportar_fatura'%}">Exportar Fatura</a>
+                    <a class="collapse-item" href="{% url 'faturas:cadastrar_compra_admin'%}">Cadastrar Compra</a>
+                    <a class="collapse-item" href="{% url 'admin:index'%}">Painel de Admin</a>
                 </div>
             </div>
             {% endif %}
@@ -293,7 +296,7 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 
                                 {% if request.user.is_authenticated %}
-                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ request.user.username|capfirst }}</span>
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ request.user.first_name|capfirst }}</span>
                                     <img class="img-profile rounded-circle"
                                         src="{% static 'img/undraw_profile.svg' %}">
                                 {% endif %}

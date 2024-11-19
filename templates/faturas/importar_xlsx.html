@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Upload de Arquivo XLSX</h1>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_usuario">Usuário</label>
+            <select name="usuario" id="id_usuario" class="form-control">
+                {% for usuario in usuarios %}
+                    <option value="{{ usuario.id }}">{{ usuario.username|capfirst }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <label for="file">Escolha um arquivo:</label>
+        <input type="file" name="file" id="file" accept=".xlsx">
+        <button type="submit">Upload</button>
+        {% if dados %}
+            <h2>Dados Importados:</h2>
+            <table>
+                <thead>
+                    <tr>
+                        {% for header in dados.0.keys %}
+                            <th>{{ header }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in dados %}
+                        <tr>
+                            {% for cell in row.values %}
+                                <td>{{ cell }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </form>
+
+{% endblock %}
