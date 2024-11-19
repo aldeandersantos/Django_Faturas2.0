@@ -10,3 +10,6 @@ def mes_ano_atual():
     mes = datetime.now().month
     ano = datetime.now().year
     return mes, ano
+
+def mes_atua_dia11():
+    return datetime.now().replace(day=11)
