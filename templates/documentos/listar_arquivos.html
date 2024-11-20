@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Meus Arquivos</h1>
+
+  {% if arquivos %}
+    <ul>
+      {% for arquivo in arquivos %}
+        <li>
+          <strong>{{ arquivo.file.name|cut:user.username|cut:"/" }}</strong><br>
+          Tipo: {{ arquivo.tipo }}<br>
+          Texto: {{ arquivo.texto }}<br>
+          Data de upload: {{ arquivo.uploaded_at }}<br>
+          <a href="{{ arquivo.file.url }}" download>Baixar</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>Você ainda não tem arquivos enviados.</p>
+  {% endif %}
+{% endblock %}

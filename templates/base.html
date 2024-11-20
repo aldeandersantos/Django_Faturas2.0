@@ -85,9 +85,31 @@
                     </div>
                 </div>
             </li>
+            <hr class="sidebar-divider">
             
-            <!-- Nav Item - Admin Collapse Menu -->
-            {% if request.user.is_staff %}
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Media
+            </div>
+
+            <!-- Nav Item - Faturas Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTree"
+                    aria-expanded="true" aria-controls="collapseTree">
+                    <i class="fas fa-fw fa-folder"></i>
+                    <span>Nuvem</span>
+                </a>
+                <div id="collapseTree" class="collapse" aria-labelledby="headingTree" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="{% url 'documentos:upload_arquivo'%}">Upload</a>
+                        <a class="collapse-item" href="{% url 'documentos:arquivos'%}">Arquivos</a>
+                    </div>
+                </div>
+            </li>
+        
+        <!-- Nav Item - Admin Collapse Menu -->
+        {% if request.user.is_staff %}
+            <hr class="sidebar-divider">
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
                 aria-expanded="true" aria-controls="collapseThree">

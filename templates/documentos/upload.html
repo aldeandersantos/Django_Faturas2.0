@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Upload de Arquivo</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {{ form.hidden_fields }}
+    {% for field in form.visible_fields %}
+        {% if field.name != 'texto' %}
+            <p>{{ field.label_tag }} {{ field }}</p>
+        {% endif %}
+    {% endfor %}
+    <div id="texto-field" style="display: none;">
+        {{ form.texto.label_tag }}
+        {{ form.texto }}
+    </div>
+    <button type="submit">Enviar</button>
+</form>
+{% if messages %}
+    <ul>
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tipoField = document.querySelector('select[name="tipo"]');
+        const textoField = document.getElementById('texto-field');
+
+        function toggleTextoField() {
+            if (tipoField.value === 'texto') {
+                textoField.style.display = 'block';
+            } else {
+                textoField.style.display = 'none';
+            }
+        }
+
+        tipoField.addEventListener('change', toggleTextoField);
+        toggleTextoField();  // Initial check
+    });
+</script>
+
+{% endblock %}
