@@ -7,3 +7,5 @@ python-dateutil==2.9.0.post0
 pandas==2.2.3
 xlsxWriter==3.2.0
 openpyxl==3.1.5
+pytest==8.3.4
+pytest-django==4.9.0
