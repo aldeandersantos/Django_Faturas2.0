@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Meus Arquivos</h1>
+        <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" 
+                hx-get="{% url 'documentos:gerenciar_arquivos' %}"
+                hx-target="#upload-form"
+                hx-swap="innerHTML show:top"
+                onclick="toggleUploadForm()">
+            <i class="fas fa-upload fa-sm text-white-50"></i> Upload Novo Arquivo
+        </button>
+    </div>
+
+    <!-- Upload Form Container -->
+    <div id="upload-form"></div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if arquivos %}
+        <div class="row" id="arquivos-container">
+            {% for arquivo in arquivos %}
+                <div class="col-xl-3 col-md-6 mb-4" id="arquivo-{{ arquivo.id }}">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                        {{ arquivo.file.name|cut:user.username|cut:"/" }}
+                                    </div>
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                        Enviado em {{ arquivo.uploaded_at|date:"d/m/Y H:i" }}
+                                    </div>
+                                    {% if arquivo.texto %}
+                                        <div class="text-muted small mt-2">
+                                            {{ arquivo.texto|truncatechars:100 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas {{ arquivo.icon }} fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col">
+                                    <a href="{{ arquivo.file.url }}" class="btn btn-success btn-sm btn-icon-split" download>
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-download"></i>
+                                        </span>
+                                        <span class="text">Baixar</span>
+                                    </a>
+                                    <button class="btn btn-danger btn-sm btn-icon-split"
+                                            hx-delete="{% url 'documentos:deletar_arquivo' arquivo.id %}"
+                                            hx-confirm="Tem certeza que deseja deletar este arquivo?"
+                                            hx-target="#arquivo-{{ arquivo.id }}"
+                                            hx-swap="delete"
+                                            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-trash"></i>
+                                        </span>
+                                        <span class="text">Deletar</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center">
+            <!-- Ilustração -->
+            <div class="text-center mb-4">
+                <i class="fas fa-folder-open fa-7x text-gray-300 mb-3"></i>
+            </div>
+            
+            <!-- Mensagem principal -->
+            <h3 class="text-gray-800 font-weight-bold mb-3">
+                Nenhum arquivo encontrado
+            </h3>
+            
+            <!-- Submensagem -->
+            <p class="text-gray-600 mb-4">
+                Parece que você ainda não fez upload de nenhum arquivo...
+            </p>
+            
+            <!-- Botão de upload -->
+            <button class="btn btn-primary"
+                    hx-get="{% url 'documentos:gerenciar_arquivos' %}"
+                    hx-target="#upload-form"
+                    hx-swap="innerHTML"
+                    onclick="toggleUploadForm()">
+                <i class="fas fa-upload mr-2"></i>
+                Fazer Upload de Arquivo
+            </button>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Inclua o HTMX -->
+<script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
+<!-- Adicione este script no final do template -->
+<script>
+function toggleUploadForm() {
+    const uploadForm = document.getElementById('upload-form');
+    if (uploadForm.innerHTML.trim()) {
+        uploadForm.innerHTML = '';
+    }
+}
+</script>
+{% endblock %} 

@@ -1,0 +1,16 @@
+{
+    "usuario_novo": {
+        "first_name": "João",
+        "last_name": "Silva",
+        "email": "joao.silva@exemplo.com",
+        "password1": "senha123",
+        "password2": "senha123"
+    },
+    "usuario_senhas_diferentes": {
+        "first_name": "João",
+        "last_name": "Silva",
+        "email": "joao.silva@exemplo.com",
+        "password1": "senha123",
+        "password2": "senha456"
+    }
+} 

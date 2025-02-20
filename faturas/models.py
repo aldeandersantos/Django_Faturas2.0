@@ -25,7 +25,7 @@ class Compra(models.Model):
 class Fatura(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     compra = models.ForeignKey(Compra, on_delete=models.CASCADE)
-    nome_compra = models.CharField(max_length=20, blank=False, null=False, default='')
+    nome_compra = models.CharField(max_length=100, blank=False, null=False, default='')
     parcela_atual = models.CharField(max_length=10, blank=True, null=True, default='')
     valor_parcela = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     valor_compra = models.DecimalField(max_digits=10, decimal_places=2, default=0)

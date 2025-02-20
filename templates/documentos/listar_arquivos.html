@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Meus Arquivos</h1>
+        <a href="{% url 'documentos:upload_arquivo' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i class="fas fa-upload fa-sm text-white-50"></i> Upload Novo Arquivo
+        </a>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% if arquivos %}
+        <div class="row">
+            {% for arquivo in arquivos %}
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                        {{ arquivo.file.name|cut:user.username|cut:"/" }}
+                                    </div>
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                        Enviado em {{ arquivo.uploaded_at|date:"d/m/Y H:i" }}
+                                    </div>
+                                    {% if arquivo.texto %}
+                                        <div class="text-muted small mt-2">
+                                            {{ arquivo.texto|truncatechars:100 }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-auto">
+                                    <i class="fas fa-file fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col">
+                                    <a href="{{ arquivo.file.url }}" class="btn btn-success btn-sm btn-icon-split" download>
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-download"></i>
+                                        </span>
+                                        <span class="text">Baixar</span>
+                                    </a>
+                                    <form method="post" action="{% url 'documentos:deletar_arquivo' arquivo.id %}" 
+                                          style="display: inline-block;"
+                                          onsubmit="return confirm('Tem certeza que deseja deletar este arquivo?');">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm btn-icon-split">
+                                            <span class="icon text-white-50">
+                                                <i class="fas fa-trash"></i>
+                                            </span>
+                                            <span class="text">Deletar</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="text-center">
+            <div class="error mx-auto" data-text="404">404</div>
+            <p class="lead text-gray-800 mb-5">Nenhum arquivo encontrado</p>
+            <p class="text-gray-500 mb-0">Parece que você ainda não fez upload de nenhum arquivo...</p>
+            <a href="{% url 'documentos:upload_arquivo' %}">&larr; Fazer Upload de Arquivo</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

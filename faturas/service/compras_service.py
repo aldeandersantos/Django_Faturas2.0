@@ -1,6 +1,5 @@
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 from dateutil.relativedelta import relativedelta
-from faturas.models import Compra, Fatura
 from faturas.forms import FaturaForm
 
 
@@ -28,7 +27,7 @@ def validar_compra(compra):
 
 def parcelar_compra(compra):
     n_parcelas = int(compra.n_parcelas)
-    compra.valor_parcela = Decimal(compra.valor_compra / n_parcelas)
+    compra.valor_parcela = (Decimal(compra.valor_compra) / n_parcelas).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
     compra.parcela = 0
     compra.data_parcela = compra.data_compra
     for i in range(n_parcelas):
