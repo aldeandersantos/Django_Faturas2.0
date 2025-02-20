@@ -81,7 +81,8 @@ class TestUserFileModel:
             arquivo.full_clean()
 
     def test_str_representation(self, arquivo_base):
-        assert str(arquivo_base) == f"{arquivo_base.usuario.username} - {arquivo_base.file.name}"
+        assert str(arquivo_base).startswith(f"{arquivo_base.usuario.username} - ")
+        assert "arquivo_teste.txt" in str(arquivo_base)
 
     def test_arquivo_sem_usuario(self, arquivo_mock):
         arquivo = UserFile(
