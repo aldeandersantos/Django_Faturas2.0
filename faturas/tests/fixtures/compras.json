@@ -1,0 +1,20 @@
+{
+    "compra_base": {
+        "nome_compra": "Supermercado Exemplo",
+        "valor_compra": "150.50",
+        "data_compra": "2024-03-15",
+        "n_parcelas": 1,
+        "compra_recorrente": false,
+        "compra_parcelada": false,
+        "cartao": "Master"
+    },
+    "compra_recorrente": {
+        "nome_compra": "Netflix",
+        "valor_compra": "45.90",
+        "data_compra": "2000-01-01",
+        "n_parcelas": 1,
+        "compra_recorrente": true,
+        "compra_parcelada": false,
+        "cartao": "Master"
+    }
+} 
