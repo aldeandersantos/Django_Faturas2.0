@@ -396,8 +396,10 @@
                     <!-- Page Heading -->
                     {% block content %}
                     {% endblock %}
-                    {% if not request.user.is_authenticated %}
-                        <p>Faça o login para acessar suas compras e faturas.</p>
+                    {% if not request.user.is_authenticated and request.path != '/' %}
+                        <div class="text-center mt-4">
+                            <p class="lead text-gray-800">Faça o login para acessar suas compras e faturas.</p>
+                        </div>
                     {% endif %}
 
                 </div>

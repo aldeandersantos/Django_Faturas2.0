@@ -2,5 +2,181 @@
 {% load static %}
 
 {% block content %}
-    <h1>Bem-vindo ao Sistema de Faturas</h1>
+{% if user.is_authenticated %}
+    <div class="container-fluid">
+        <!-- Cabeçalho da Página -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+        </div>
+
+        <!-- Cards de Informações -->
+        <div class="row">
+            <!-- Card - Total de Compras do Mês -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Valor total da Fatura (Mês Atual)</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">R$ {{ total_mes|floatformat:2 }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card - Total de Documentos -->
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Documentos Armazenados</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_documentos }}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-file fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Linha de Conteúdo -->
+        <div class="row">
+            <!-- Área de Ações Rápidas -->
+            <div class="col-lg-6 mb-4">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Ações Rápidas</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-6 mb-3">
+                                <a href="{% url 'faturas:cadastrar_compra' %}" class="btn btn-primary btn-block">
+                                    <i class="fas fa-plus fa-sm"></i> Nova Compra
+                                </a>
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <a href="{% url 'documentos:gerenciar_arquivos' %}" class="btn btn-success btn-block">
+                                    <i class="fas fa-upload fa-sm"></i> Gerenciar Arquivos
+                                </a>
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <a href="{% url 'faturas:ver_fatura' %}" class="btn btn-info btn-block">
+                                    <i class="fas fa-file-invoice fa-sm"></i> Ver Fatura
+                                </a>
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <a href="{% url 'faturas:lista_compras' %}" class="btn btn-warning btn-block">
+                                    <i class="fas fa-list fa-sm"></i> Listar Compras
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Últimas Atividades -->
+            <div class="col-lg-6 mb-4">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Últimas Atividades</h6>
+                    </div>
+                    <div class="card-body">
+                        {% if ultimas_atividades %}
+                            <div class="list-group">
+                                {% for atividade in ultimas_atividades %}
+                                    <div class="list-group-item {% if atividade.tipo == 'compra' %}list-group-item-primary{% else %}list-group-item-success{% endif %} bg-transparent">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h6 class="mb-1 text-gray-800">{{ atividade.descricao }}</h6>
+                                            <small class="text-gray-600">{{ atividade.data|date:"d/m/Y" }}</small>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="text-center text-gray-600">Nenhuma atividade recente</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="container">
+        <div class="text-center">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="p-5">
+                        <div class="mb-4">
+                            <i class="fas fa-chart-line fa-6x text-primary"></i>
+                        </div>
+                        
+                        <h1 class="h2 mb-4 {% if user.is_authenticated %}text-gray-900{% else %}text-primary{% endif %} font-weight-bold">
+                            Bem-vindo ao Sistema de Gestão de Faturas
+                        </h1>
+                        
+                        <p class="lead mb-5 {% if user.is_authenticated %}text-gray-800{% else %}text-gray-700{% endif %} font-weight-500">
+                            Gerencie suas compras, faturas e documentos de forma simples e eficiente.
+                        </p>
+                        
+                        <div class="features-grid mb-5">
+                            <div class="row">
+                                <div class="col-md-4 mb-4">
+                                    <div class="card border-left-primary shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="text-center">
+                                                <i class="fas fa-credit-card fa-2x text-primary mb-3"></i>
+                                                <h5 class="mb-2 font-weight-bold">Controle de Compras</h5>
+                                                <p class="text-gray-700">Registre e acompanhe todas as suas compras</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="card border-left-success shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="text-center">
+                                                <i class="fas fa-file-invoice-dollar fa-2x text-success mb-3"></i>
+                                                <h5 class="mb-2 font-weight-bold">Gestão de Faturas</h5>
+                                                <p class="text-gray-700">Visualize e exporte suas faturas mensais</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <div class="card border-left-info shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="text-center">
+                                                <i class="fas fa-cloud-upload-alt fa-2x text-info mb-3"></i>
+                                                <h5 class="mb-2 font-weight-bold">Armazenamento</h5>
+                                                <p class="text-gray-700">Guarde seus documentos com segurança</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="cta-buttons">
+                            <a href="{% url 'login' %}" class="btn btn-primary btn-lg px-5 mr-3">
+                                <i class="fas fa-sign-in-alt fa-sm mr-2"></i> Fazer Login
+                            </a>
+                            <a href="{% url 'faturas:register' %}" class="btn btn-success btn-lg px-5">
+                                <i class="fas fa-user-plus fa-sm mr-2"></i> Criar Conta
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
 {% endblock %}

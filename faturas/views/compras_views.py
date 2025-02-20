@@ -6,11 +6,44 @@ from django.contrib.auth.models import User
 from faturas.forms import CompraForm
 from faturas.service.compras_service import *
 from faturas.service.usuario_service import *
-
+from datetime import datetime
+from documentos.models import UserFile, UserActivity
+from faturas.service.fatura_service import gera_fatura
 
 
 def home(request):
-    return render(request, 'faturas/home.html')
+    if not request.user.is_authenticated:
+        return render(request, 'faturas/home.html')
+    
+    hoje = datetime.now()
+    mes_atual = hoje.month
+    ano_atual = hoje.year
+
+    faturas, total_mes, _ = gera_fatura(request, mes_atual, ano_atual)
+
+    total_documentos = UserFile.objects.filter(
+        usuario=request.user
+    ).count()
+
+    ultimas_atividades = UserActivity.objects.filter(
+        usuario=request.user
+    ).order_by('-data')[:5]
+
+    atividades_formatadas = []
+    for atividade in ultimas_atividades:
+        atividades_formatadas.append({
+            'descricao': atividade.descricao,
+            'data': atividade.data,
+            'tipo': 'compra' if atividade.tipo == 'compra' else 'arquivo'
+        })
+
+    context = {
+        'total_mes': total_mes,
+        'total_documentos': total_documentos,
+        'ultimas_atividades': atividades_formatadas
+    }
+
+    return render(request, 'faturas/home.html', context)
 
 
 @login_required

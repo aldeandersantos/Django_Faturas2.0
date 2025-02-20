@@ -15,10 +15,24 @@ from faturas.views.compras_views import *
 def ver_fatura(request):
     mes = request.GET.get('mes', None)
     ano = request.GET.get('ano', None)
+    
     if mes is None or ano is None:
         mes, ano = mes_ano_atual()
+    else:
+        mes = int(mes)
+        ano = int(ano)
+        
     faturas, total, compras = gera_fatura(request, mes, ano)
-    return render(request, 'faturas/ver_fatura.html', {'faturas': faturas, 'mes': mes, 'ano': ano, 'total': total, 'compras': compras})
+    
+    context = {
+        'faturas': faturas,
+        'mes': str(mes),
+        'ano': ano,
+        'total': total,
+        'compras': compras
+    }
+    
+    return render(request, 'faturas/ver_fatura.html', context)
 
 
 @login_required
