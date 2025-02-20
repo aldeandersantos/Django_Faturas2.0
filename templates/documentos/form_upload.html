@@ -1,28 +1,36 @@
-{% extends 'base.html' %}
-
-{% block content %}
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Upload de Arquivo</h6>
     </div>
     <div class="card-body">
-        <form method="post" enctype="multipart/form-data" hx-post="{% url 'documentos:gerenciar_arquivos' %}" hx-swap="outerHTML">
+        <form method="post" enctype="multipart/form-data" 
+              hx-post="{% url 'documentos:gerenciar_arquivos' %}" 
+              hx-target="#upload-form"
+              hx-swap="outerHTML">
             {% csrf_token %}
-            {{ form.non_field_errors }}
-            {{ form.hidden_fields }}
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
             {% for field in form.visible_fields %}
                 {% if field.name != 'texto' %}
                     <div class="form-group">
-                        {{ field.label_tag }}
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                         {{ field }}
                         {% if field.help_text %}
                             <small class="form-text text-muted">{{ field.help_text }}</small>
+                        {% endif %}
+                        {% if field.errors %}
+                            <div class="alert alert-danger">
+                                {{ field.errors }}
+                            </div>
                         {% endif %}
                     </div>
                 {% endif %}
             {% endfor %}
             <div id="texto-field" class="form-group" style="display: none;">
-                {{ form.texto.label_tag }}
+                <label for="{{ form.texto.id_for_label }}">{{ form.texto.label }}</label>
                 {{ form.texto }}
             </div>
             <button type="submit" class="btn btn-primary">Enviar</button>
@@ -48,15 +56,6 @@
         }
 
         tipoField.addEventListener('change', toggleTextoField);
-        toggleTextoField();  // Initial check
+        toggleTextoField();
     });
-</script>
-
-{% if messages %}
-    <ul>
-        {% for message in messages %}
-            <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}
-{% endblock %}
+</script> 

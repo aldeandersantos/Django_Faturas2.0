@@ -5,10 +5,17 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Meus Arquivos</h1>
-        <a href="{% url 'documentos:upload_arquivo' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" 
+                hx-get="{% url 'documentos:gerenciar_arquivos' %}"
+                hx-target="#upload-form"
+                hx-swap="innerHTML show:top"
+                onclick="toggleUploadForm()">
             <i class="fas fa-upload fa-sm text-white-50"></i> Upload Novo Arquivo
-        </a>
+        </button>
     </div>
+
+    <!-- Upload Form Container -->
+    <div id="upload-form"></div>
 
     {% if messages %}
         {% for message in messages %}
@@ -22,9 +29,9 @@
     {% endif %}
 
     {% if arquivos %}
-        <div class="row">
+        <div class="row" id="arquivos-container">
             {% for arquivo in arquivos %}
-                <div class="col-xl-3 col-md-6 mb-4">
+                <div class="col-xl-3 col-md-6 mb-4" id="arquivo-{{ arquivo.id }}">
                     <div class="card border-left-primary shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -42,7 +49,7 @@
                                     {% endif %}
                                 </div>
                                 <div class="col-auto">
-                                    <i class="fas fa-file fa-2x text-gray-300"></i>
+                                    <i class="fas {{ arquivo.icon }} fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -53,17 +60,17 @@
                                         </span>
                                         <span class="text">Baixar</span>
                                     </a>
-                                    <form method="post" action="{% url 'documentos:deletar_arquivo' arquivo.id %}" 
-                                          style="display: inline-block;"
-                                          onsubmit="return confirm('Tem certeza que deseja deletar este arquivo?');">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-danger btn-sm btn-icon-split">
-                                            <span class="icon text-white-50">
-                                                <i class="fas fa-trash"></i>
-                                            </span>
-                                            <span class="text">Deletar</span>
-                                        </button>
-                                    </form>
+                                    <button class="btn btn-danger btn-sm btn-icon-split"
+                                            hx-delete="{% url 'documentos:deletar_arquivo' arquivo.id %}"
+                                            hx-confirm="Tem certeza que deseja deletar este arquivo?"
+                                            hx-target="#arquivo-{{ arquivo.id }}"
+                                            hx-swap="delete"
+                                            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+                                        <span class="icon text-white-50">
+                                            <i class="fas fa-trash"></i>
+                                        </span>
+                                        <span class="text">Deletar</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -73,11 +80,44 @@
         </div>
     {% else %}
         <div class="text-center">
-            <div class="error mx-auto" data-text="404">404</div>
-            <p class="lead text-gray-800 mb-5">Nenhum arquivo encontrado</p>
-            <p class="text-gray-500 mb-0">Parece que você ainda não fez upload de nenhum arquivo...</p>
-            <a href="{% url 'documentos:upload_arquivo' %}">&larr; Fazer Upload de Arquivo</a>
+            <!-- Ilustração -->
+            <div class="text-center mb-4">
+                <i class="fas fa-folder-open fa-7x text-gray-300 mb-3"></i>
+            </div>
+            
+            <!-- Mensagem principal -->
+            <h3 class="text-gray-800 font-weight-bold mb-3">
+                Nenhum arquivo encontrado
+            </h3>
+            
+            <!-- Submensagem -->
+            <p class="text-gray-600 mb-4">
+                Parece que você ainda não fez upload de nenhum arquivo...
+            </p>
+            
+            <!-- Botão de upload -->
+            <button class="btn btn-primary"
+                    hx-get="{% url 'documentos:gerenciar_arquivos' %}"
+                    hx-target="#upload-form"
+                    hx-swap="innerHTML"
+                    onclick="toggleUploadForm()">
+                <i class="fas fa-upload mr-2"></i>
+                Fazer Upload de Arquivo
+            </button>
         </div>
     {% endif %}
 </div>
-{% endblock %}
+
+<!-- Inclua o HTMX -->
+<script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
+<!-- Adicione este script no final do template -->
+<script>
+function toggleUploadForm() {
+    const uploadForm = document.getElementById('upload-form');
+    if (uploadForm.innerHTML.trim()) {
+        uploadForm.innerHTML = '';
+    }
+}
+</script>
+{% endblock %} 

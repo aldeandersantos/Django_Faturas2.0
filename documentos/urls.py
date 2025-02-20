@@ -4,6 +4,6 @@ from documentos.views import *
 app_name = 'documentos'
 
 urlpatterns = [
-    path('upload', upload_arquivo, name='upload_arquivo'),
-    path('arquivos', listar_arquivos, name='arquivos'),
+    path('arquivos', gerenciar_arquivos, name='gerenciar_arquivos'),
+    path('arquivos/<int:arquivo_id>', deletar_arquivo, name='deletar_arquivo'),
 ]
