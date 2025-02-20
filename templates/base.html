@@ -321,6 +321,8 @@
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ request.user.first_name|capfirst }}</span>
                                     <img class="img-profile rounded-circle"
                                         src="{% static 'img/undraw_profile.svg' %}">
+                                {% else %}
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">Login</span>
                                 {% endif %}
                             </a>
                             {% if request.user.is_authenticated %}
@@ -349,10 +351,17 @@
                                     </form>
                                 </div>
                             {% else %}
-                                <a class="dropdown-item" href="{% url 'login' %}">
-                                    <i class="fas fa-sign-in-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Login
-                                </a>
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                    aria-labelledby="userDropdown">
+                                    <a class="dropdown-item" href="{% url 'login' %}">
+                                        <i class="fas fa-sign-in-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Login
+                                    </a>
+                                    <a class="dropdown-item" href="{% url 'faturas:register' %}">
+                                        <i class="fas fa-user-plus fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Registrar
+                                    </a>
+                                </div>
                             {% endif %}
                         </li>
 
