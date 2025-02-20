@@ -6,11 +6,61 @@ from django.contrib.auth.models import User
 from faturas.forms import CompraForm
 from faturas.service.compras_service import *
 from faturas.service.usuario_service import *
-
+from django.db.models import Sum
+from datetime import datetime
+from documentos.models import UserFile
+from faturas.service.fatura_service import gera_fatura
+from django.utils import timezone
 
 
 def home(request):
-    return render(request, 'faturas/home.html')
+    if not request.user.is_authenticated:
+        return render(request, 'faturas/home.html')
+    
+    hoje = datetime.now()
+    mes_atual = hoje.month
+    ano_atual = hoje.year
+
+    faturas, total_mes, _ = gera_fatura(request, mes_atual, ano_atual)
+
+    total_documentos = UserFile.objects.filter(
+        usuario=request.user
+    ).count()
+
+    compras_recentes = Compra.objects.filter(
+        usuario=request.user
+    ).order_by('-data_compra')[:5]
+
+    arquivos_recentes = UserFile.objects.filter(
+        usuario=request.user
+    ).order_by('-uploaded_at')[:5]
+
+    ultimas_atividades = []
+    
+    for compra in compras_recentes:
+        ultimas_atividades.append({
+            'descricao': f'Compra: {compra.nome_compra} - R$ {compra.valor_compra:.2f}',
+            'data': timezone.localtime(timezone.make_aware(datetime.combine(compra.data_compra, datetime.min.time()))),
+            'tipo': 'compra'
+        })
+
+    for arquivo in arquivos_recentes:
+        ultimas_atividades.append({
+            'descricao': f'Upload: {arquivo.file.name.split("/")[-1]}',
+            'data': timezone.localtime(arquivo.uploaded_at),
+            'tipo': 'arquivo'
+        })
+
+    ultimas_atividades.sort(key=lambda x: x['data'], reverse=True)
+    ultimas_atividades = ultimas_atividades[:5]
+
+    context = {
+        'total_mes': total_mes,
+        'total_documentos': total_documentos,
+        'ultimas_atividades': ultimas_atividades
+    }
+
+    return render(request, 'faturas/home.html', context)
 
 
 @login_required
