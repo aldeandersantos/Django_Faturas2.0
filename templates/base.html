@@ -20,6 +20,20 @@
 
     <!-- Custom styles for this template-->
     <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/dark-mode.css' %}" rel="stylesheet">
+
+    <script>
+    // Verifica a preferência do sistema
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    }
+
+    // Verifica se há preferência salva
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+    </script>
 
 </head>
 
@@ -310,6 +324,13 @@
                             </div>
                         </li>
 
+                        <!-- Nav Item - Dark Mode Toggle -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <button class="btn btn-link nav-link" id="darkModeToggle">
+                                <i class="fas fa-moon fa-fw"></i>
+                            </button>
+                        </li>
+
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
@@ -436,6 +457,32 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+    <!-- Dark Mode Toggle Script -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const icon = darkModeToggle.querySelector('i');
+        
+        // Verifica se há preferência salva
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme) {
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            icon.className = currentTheme === 'dark' ? 'fas fa-sun fa-fw' : 'fas fa-moon fa-fw';
+        }
+
+        darkModeToggle.addEventListener('click', function() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Alterna o ícone
+            icon.className = newTheme === 'dark' ? 'fas fa-sun fa-fw' : 'fas fa-moon fa-fw';
+        });
+    });
+    </script>
 
 </body>
 

@@ -1,0 +1,313 @@
+[data-theme="dark"] {
+    --bg-primary: #0d1117;
+    --bg-secondary: #161b22;
+    --text-primary: #c9d1d9;
+    --text-secondary: #8b949e;
+    --border-color: #30363d;
+    --link-color: #58a6ff;
+    --danger: #f85149;
+    --success: #238636;
+    --warning: #d29922;
+}
+
+[data-theme="dark"] body {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .bg-white {
+    background-color: var(--bg-secondary) !important;
+}
+
+[data-theme="dark"] .bg-gradient-primary {
+    background-color: #1a1f24 !important;
+    background-image: none !important;
+}
+
+[data-theme="dark"] .card {
+    background-color: var(--bg-secondary) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+[data-theme="dark"] .card-header {
+    background-color: var(--bg-secondary) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+[data-theme="dark"] .table {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .table-bordered td,
+[data-theme="dark"] .table-bordered th {
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .text-gray-800 {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .text-gray-500 {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .dropdown-menu {
+    background-color: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .dropdown-item {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .dropdown-item:hover {
+    background-color: var(--bg-primary) !important;
+}
+
+[data-theme="dark"] .modal-content {
+    background-color: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .modal-header {
+    border-bottom-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .modal-footer {
+    border-top-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .close {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .sidebar .nav-item .nav-link {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .sidebar .nav-item .nav-link:hover {
+    background-color: var(--bg-primary) !important;
+}
+
+[data-theme="dark"] .sidebar-dark .sidebar-brand {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .topbar {
+    background-color: var(--bg-secondary) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+    background-color: var(--bg-primary) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .form-control:focus {
+    background-color: var(--bg-primary) !important;
+    border-color: var(--link-color) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Ajustes adicionais para o dark mode */
+[data-theme="dark"] .sidebar-dark {
+    background-color: var(--bg-primary) !important;
+}
+
+[data-theme="dark"] .bg-gradient-primary {
+    background: var(--bg-primary) !important;
+}
+
+[data-theme="dark"] .collapse-inner {
+    background-color: var(--bg-secondary) !important;
+}
+
+[data-theme="dark"] .collapse-item {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .collapse-item:hover {
+    background-color: var(--bg-primary) !important;
+}
+
+[data-theme="dark"] .sidebar .nav-item.active .nav-link {
+    color: var(--text-primary) !important;
+    background-color: var(--bg-secondary) !important;
+}
+
+[data-theme="dark"] .text-gray-600 {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .text-gray-400 {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .border-left-primary {
+    border-left-color: var(--link-color) !important;
+}
+
+[data-theme="dark"] .border-bottom-primary {
+    border-bottom-color: var(--link-color) !important;
+}
+
+[data-theme="dark"] .shadow {
+    box-shadow: 0 .15rem 1.75rem 0 rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme="dark"] .dropdown-header {
+    background-color: var(--bg-secondary) !important;
+    border-bottom-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .dropdown-list .dropdown-item {
+    border-bottom-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .dropdown-list .dropdown-item:hover {
+    background-color: var(--bg-primary) !important;
+}
+
+[data-theme="dark"] .icon-circle {
+    background-color: var(--bg-primary) !important;
+}
+
+[data-theme="dark"] .sticky-footer {
+    background-color: var(--bg-secondary) !important;
+    border-top: 1px solid var(--border-color) !important;
+}
+
+[data-theme="dark"] .btn-light,
+[data-theme="dark"] .btn-secondary {
+    background-color: var(--bg-primary) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .btn-light:hover,
+[data-theme="dark"] .btn-secondary:hover {
+    background-color: var(--bg-secondary) !important;
+}
+
+[data-theme="dark"] .scroll-to-top {
+    background-color: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .scroll-to-top:hover {
+    background-color: var(--bg-primary) !important;
+}
+
+[data-theme="dark"] hr {
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .img-profile {
+    border: 2px solid var(--border-color) !important;
+}
+
+[data-theme="dark"] .topbar .nav-item .nav-link {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .sidebar-divider {
+    border-top-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .sidebar-heading {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="dark"] .btn-link {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .btn-link:hover {
+    color: var(--link-color) !important;
+}
+
+[data-theme="dark"] .navbar-search .form-control {
+    background-color: var(--bg-primary) !important;
+}
+
+[data-theme="dark"] .navbar-search .btn {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .badge-danger {
+    background-color: var(--danger) !important;
+}
+
+[data-theme="dark"] .badge-warning {
+    background-color: var(--warning) !important;
+}
+
+[data-theme="dark"] .badge-success {
+    background-color: var(--success) !important;
+}
+
+/* Correção para o fundo branco da área central */
+[data-theme="dark"] #content-wrapper {
+    background-color: var(--bg-primary) !important;
+}
+
+[data-theme="dark"] #content {
+    background-color: var(--bg-primary) !important;
+}
+
+[data-theme="dark"] .container-fluid {
+    background-color: var(--bg-primary) !important;
+}
+
+/* Ajustes para elementos específicos */
+[data-theme="dark"] .bg-light {
+    background-color: var(--bg-secondary) !important;
+}
+
+[data-theme="dark"] .bg-body {
+    background-color: var(--bg-primary) !important;
+}
+
+/* Ajuste para cards e elementos com fundo branco */
+[data-theme="dark"] .card,
+[data-theme="dark"] .card-body,
+[data-theme="dark"] .card-header,
+[data-theme="dark"] .card-footer {
+    background-color: var(--bg-secondary) !important;
+}
+
+/* Ajuste para tabelas */
+[data-theme="dark"] .table {
+    background-color: var(--bg-secondary) !important;
+}
+
+[data-theme="dark"] .table thead th {
+    background-color: var(--bg-secondary) !important;
+    border-bottom-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .table-hover tbody tr:hover {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Ajuste para paginação */
+[data-theme="dark"] .page-item.disabled .page-link {
+    background-color: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .page-link {
+    background-color: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .page-item.active .page-link {
+    background-color: var(--link-color) !important;
+    border-color: var(--link-color) !important;
+} 
