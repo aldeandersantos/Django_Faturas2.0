@@ -1,0 +1,19 @@
+{
+    "arquivo_texto": {
+        "nome": "documento.txt",
+        "conteudo": "Conteúdo do arquivo de teste",
+        "tipo": "texto",
+        "texto": "Descrição do arquivo de texto"
+    },
+    "arquivo_link": {
+        "nome": "link.url",
+        "conteudo": "https://example.com",
+        "tipo": "link",
+        "texto": "Link importante"
+    },
+    "arquivo_invalido": {
+        "nome": "arquivo_grande.txt",
+        "tipo": "arquivo",
+        "tamanho_mb": 50
+    }
+} 

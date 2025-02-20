@@ -1,0 +1,16 @@
+{
+    "usuario_padrao": {
+        "username": "testuser",
+        "password": "12345",
+        "email": "test@example.com",
+        "first_name": "Test",
+        "last_name": "User"
+    },
+    "usuario_admin": {
+        "username": "admin",
+        "password": "admin123",
+        "email": "admin@example.com",
+        "is_staff": true,
+        "is_superuser": true
+    }
+} 
