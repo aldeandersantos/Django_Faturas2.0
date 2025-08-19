@@ -9,6 +9,7 @@ from faturas.service.usuario_service import *
 from datetime import datetime
 from documentos.models import UserFile, UserActivity
 from faturas.service.fatura_service import gera_fatura
+from decimal import Decimal, InvalidOperation
 
 
 def home(request):
@@ -49,15 +50,36 @@ def home(request):
 @login_required
 def cadastrar_compra(request):
     if request.method == 'POST':
-        import pprint
-        pprint.pprint(request.POST)
-        form = CompraForm(request.POST)
+        # Check if user is inputting installment value instead of total value
+        valor_type = request.POST.get('valor_type', 'total')
+        
+        # Create a mutable copy of POST data
+        post_data = request.POST.copy()
+        
+        # If user entered installment value, calculate total value
+        if valor_type == 'parcela':
+            valor_parcela = post_data.get('valor_compra', '0')
+            n_parcelas = post_data.get('n_parcelas', '1')
+            
+            try:
+                valor_parcela_decimal = Decimal(valor_parcela)
+                n_parcelas_int = int(n_parcelas)
+                valor_total = valor_parcela_decimal * n_parcelas_int
+                
+                # Update the form data with calculated total
+                post_data['valor_compra'] = str(valor_total)
+            except (ValueError, TypeError, InvalidOperation):
+                # Let form validation handle the error
+                pass
+        
+        form = CompraForm(post_data)
         if form.is_valid():
             compra = form.save(commit=False)
             compra.usuario = request.user
             falha = validar_compra(compra)
             if falha is None:
                 salvar_compra(compra)
+                return redirect('faturas:lista_compras')
             else:
                 form.add_error(falha[0], falha[1])
         return render(request, 'faturas/cadastrar_compra.html', {'form': form})
@@ -87,13 +109,36 @@ def ver_compras(request):
 def cadastrar_compra_admin(request):
     usuarios = User.objects.all()
     if request.method == 'POST':
-        form = CompraForm(request.POST)
+        # Check if user is inputting installment value instead of total value
+        valor_type = request.POST.get('valor_type', 'total')
+        
+        # Create a mutable copy of POST data
+        post_data = request.POST.copy()
+        
+        # If user entered installment value, calculate total value
+        if valor_type == 'parcela':
+            valor_parcela = post_data.get('valor_compra', '0')
+            n_parcelas = post_data.get('n_parcelas', '1')
+            
+            try:
+                valor_parcela_decimal = Decimal(valor_parcela)
+                n_parcelas_int = int(n_parcelas)
+                valor_total = valor_parcela_decimal * n_parcelas_int
+                
+                # Update the form data with calculated total
+                post_data['valor_compra'] = str(valor_total)
+            except (ValueError, TypeError, InvalidOperation):
+                # Let form validation handle the error
+                pass
+        
+        form = CompraForm(post_data)
         if form.is_valid():
             compra = form.save(commit=False)
             compra.usuario = User.objects.get(id=request.POST.get('usuario'))
             falha = validar_compra(compra)
             if falha is None:
                 salvar_compra(compra)
+                return redirect('faturas:lista_compras')
             else:
                 form.add_error(falha[0], falha[1])
         return render(request, 'faturas/cadastro_compras_admin.html', {'form': form, 'usuarios': usuarios})

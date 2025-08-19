@@ -7,7 +7,8 @@
         <div class="col-lg-6">
             <div class="card o-hidden border-0 shadow-lg my-5">
                 <div class="card-body p-5">
-                    <h2 class="text-center">Cadastrar Compra</h2>
+                    <h2 class="text-center mb-4">Cadastrar Compra</h2>
+                    
                     <form method="post" class="user">
                         {% csrf_token %}
                          
@@ -19,11 +20,35 @@
                                 {% endfor %}
                             </select>
                         </div>
+
+                        <!-- Toggle para escolher entre valor total ou parcela -->
+                        <div class="form-group mb-4">
+                            <label class="form-label fw-bold">Tipo de Valor</label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="valor_type" id="radio_total" value="total" checked>
+                                <label class="btn btn-outline-primary" for="radio_total">💰 Valor Total</label>
+                                
+                                <input type="radio" class="btn-check" name="valor_type" id="radio_parcela" value="parcela">
+                                <label class="btn btn-outline-primary" for="radio_parcela">💳 Valor da Parcela</label>
+                            </div>
+                        </div>
+
+                        <!-- Campos do formulário -->
                         {% for field in form %}
                             {% if field.name != 'compra_parcelada' %}
                                 <div class="form-group">
-                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    <label for="{{ field.id_for_label }}" 
+                                           {% if field.name == 'valor_compra' %}id="valor-label"{% endif %}>
+                                        {{ field.label }}
+                                    </label>
                                     {{ field }}
+                                    
+                                    <!-- Texto de ajuda dinâmico para o campo valor -->
+                                    {% if field.name == 'valor_compra' %}
+                                        <small class="form-text text-muted" id="valor-help">
+                                            Digite o valor total da compra
+                                        </small>
+                                    {% endif %}
                                     
                                     <!-- Erros do campo -->
                                     {% if field.errors %}
@@ -37,16 +62,74 @@
                             {% endif %}
                         {% endfor %}
                         
-                        <button type="submit" class="btn btn-primary btn-user btn-block">Cadastrar</button>
+                        <button type="submit" class="btn btn-primary btn-user btn-block">
+                            💾 Cadastrar
+                        </button>
                     </form>
+                    
                     <hr>
                     <div class="text-center">
-                        <a href="{% url 'faturas:lista_compras' %}" class="btn btn-secondary">Voltar para Lista de Compras</a>
+                        <a href="{% url 'faturas:lista_compras' %}" class="btn btn-secondary">
+                            ← Voltar para Lista de Compras
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+.btn-check:checked + .btn-outline-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: white;
+}
+.fw-bold {
+    font-weight: bold;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const radioTotal = document.getElementById('radio_total');
+    const radioParcela = document.getElementById('radio_parcela');
+    const valorLabel = document.getElementById('valor-label');
+    const valorHelp = document.getElementById('valor-help');
+    const valorInput = document.querySelector('#id_valor_compra');
+    const parcelasInput = document.querySelector('#id_n_parcelas');
+    
+    function updateLabels() {
+        if (radioParcela.checked) {
+            valorLabel.textContent = 'Valor de Cada Parcela';
+            valorHelp.textContent = 'Digite o valor de cada parcela';
+        } else {
+            valorLabel.textContent = 'Valor da Compra';
+            valorHelp.textContent = 'Digite o valor total da compra';
+        }
+        calculatePreview();
+    }
+    
+    function calculatePreview() {
+        const valor = parseFloat(valorInput.value) || 0;
+        const parcelas = parseInt(parcelasInput.value) || 1;
+        
+        if (valor > 0 && parcelas > 1) {
+            if (radioParcela.checked) {
+                const total = valor * parcelas;
+                valorHelp.textContent = `Total: R$ ${total.toFixed(2)} (${parcelas}x R$ ${valor.toFixed(2)})`;
+            } else {
+                const parcela = valor / parcelas;
+                valorHelp.textContent = `${parcelas}x de R$ ${parcela.toFixed(2)}`;
+            }
+        }
+    }
+    
+    radioTotal.addEventListener('change', updateLabels);
+    radioParcela.addEventListener('change', updateLabels);
+    valorInput.addEventListener('input', calculatePreview);
+    parcelasInput.addEventListener('input', calculatePreview);
+});
+</script>
 
 {% endblock %}

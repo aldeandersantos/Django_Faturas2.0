@@ -11,14 +11,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 env_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'env', '.env')
 load_dotenv(dotenv_path=env_path)
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-development-key-only-for-testing')
 
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.231']
+ALLOWED_HOSTS = ['192.168.0.231', 'localhost', '127.0.0.1', '0.0.0.0']
 
 
 # Application definition
