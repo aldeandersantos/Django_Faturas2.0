@@ -9,6 +9,7 @@ from faturas.service.usuario_service import *
 from datetime import datetime
 from documentos.models import UserFile, UserActivity
 from faturas.service.fatura_service import gera_fatura
+from django.core.paginator import Paginator
 
 
 def home(request):
@@ -77,11 +78,23 @@ def deletar_compra(request, id):
 
 @login_required
 def ver_compras(request):
-    compras = Compra.objects.filter(usuario=request.user)
-    for compra in compras:
+    compras_qs = Compra.objects.filter(usuario=request.user).order_by('-data_compra')
+    paginator = Paginator(compras_qs, 20)  # 20 compras por página
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    for compra in page_obj:
         if not compra.compra_parcelada:
             compra.parcelas = ''
-    return render(request, 'faturas/tables.html', {'compras': compras})
+
+    context = {
+        'compras': page_obj,
+        'page_obj': page_obj,
+        'paginator': paginator,
+        'is_paginated': page_obj.has_other_pages(),
+    }
+
+    return render(request, 'faturas/tables.html', context)
 
 @staff_member_required
 def cadastrar_compra_admin(request):
